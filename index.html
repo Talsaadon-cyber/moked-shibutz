@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#185FA5">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="מוקד שיבוץ">
+<title>מוקד שיבוץ</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.14.0/dist/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#185FA5;--primary-dk:#0C447C;--primary-lt:#E6F1FB;--bg:#fff;--bg2:#f5f5f5;--bg3:#eee;--tx:#1a1a1a;--tx2:#666;--tx3:#999;--br:rgba(0,0,0,0.1);--br2:rgba(0,0,0,0.2);--r:10px;--rlg:14px;--sb:env(safe-area-inset-bottom,0px);--st:env(safe-area-inset-top,0px)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;direction:rtl;background:var(--bg2);color:var(--tx);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+.header{background:var(--primary);color:#fff;padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;padding-top:calc(12px + var(--st))}
+.hlogo{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
+.htitle{font-size:16px;font-weight:600}
+.hsub{font-size:11px;opacity:.8;margin-top:1px}
+.hbtn{background:rgba(255,255,255,.2);border:none;color:#fff;padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-weight:500}
+.offline{background:#BA7517;color:#fff;text-align:center;padding:6px;font-size:12px;display:none}
+.offline.show{display:block}
+.content{flex:1;overflow-y:auto;padding:12px 14px;padding-bottom:calc(70px + var(--sb))}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--bg);border-top:.5px solid var(--br);display:flex;padding-bottom:var(--sb);z-index:100}
+.bni{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 4px;cursor:pointer;position:relative;color:var(--tx3);font-size:10px;gap:3px}
+.bni i{font-size:22px}
+.bni.on{color:var(--primary)}
+.bni.on::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:var(--primary);border-radius:0 0 2px 2px}
+.bnbadge{position:absolute;top:5px;left:calc(50% + 8px);background:#E24B4A;color:#fff;font-size:10px;font-weight:600;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.card{background:var(--bg);border-radius:var(--rlg);border:.5px solid var(--br);margin-bottom:10px;overflow:hidden}
+.card-hdr{padding:12px 14px;border-bottom:.5px solid var(--br);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:space-between}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.metric{background:var(--bg);border-radius:var(--r);padding:12px 14px;border:.5px solid var(--br)}
+.ml{font-size:11px;color:var(--tx2);margin-bottom:2px}
+.mv{font-size:24px;font-weight:600}
+.ms{font-size:11px;color:var(--tx3);margin-top:1px}
+.sscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:480px}
+th{font-size:11px;font-weight:600;color:var(--tx2);padding:7px 6px;text-align:center;background:var(--bg2);border-bottom:.5px solid var(--br);white-space:nowrap}
+td{padding:4px 5px;border-bottom:.5px solid var(--br);vertical-align:top;font-size:10px}
+tr:last-child td{border-bottom:none}
+.tag{display:inline-flex;align-items:center;padding:1px 5px;border-radius:3px;font-size:9px;margin:1px;white-space:nowrap}
+.ty{background:#FFFF99;color:#633806}.tb{background:#B5D4F4;color:#042C53}.tp{background:#FFB3CC;color:#4B1528}.te{background:#EAF3DE;color:#173404}.ta{background:#B5D4F4;color:#0C447C;font-weight:600}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wcard{background:var(--bg);border-radius:var(--r);border:.5px solid var(--br);padding:12px}
+.wct{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.wav{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0}
+.wname{font-size:13px;font-weight:600}
+.wrole{font-size:11px;color:var(--tx2)}
+.wtype{font-size:10px;padding:2px 6px;border-radius:6px;display:block;margin-bottom:7px}
+.ws{display:flex;gap:4px}
+.wst{flex:1;text-align:center;background:var(--bg2);border-radius:6px;padding:4px 2px}
+.wsv{font-size:14px;font-weight:600}
+.wsl{font-size:9px;color:var(--tx3)}
+.ppick{width:100%;padding:10px 14px;background:var(--bg);border:.5px solid var(--br2);border-radius:var(--r);font-size:14px;margin-bottom:10px;direction:rtl}
+.srow{display:flex;gap:10px;padding:10px 14px;border-bottom:.5px solid var(--br)}
+.srow:last-child{border-bottom:none}
+.sd8{width:38px;text-align:center;flex-shrink:0}
+.sday{font-size:10px;color:var(--tx2)}
+.snum{font-size:18px;font-weight:600;line-height:1}
+.spill{padding:3px 9px;border-radius:8px;font-size:11px;font-weight:600;white-space:nowrap;align-self:center;flex-shrink:0}
+.si{flex:1;min-width:0}
+.shrs{font-size:11px;color:var(--tx2);margin-bottom:3px}
+.why{margin-top:3px;padding:4px 8px;border-radius:6px;font-size:11px;display:flex;gap:5px;line-height:1.4}
+.why i{font-size:13px;flex-shrink:0;margin-top:1px}
+.wr{background:#EAF3DE;color:#173404}.wa{background:#E6F1FB;color:#042C53}.ww{background:#FAEEDA;color:#412402}
+.fgroup{margin-bottom:12px}
+.flbl{font-size:12px;color:var(--tx2);margin-bottom:5px;display:block}
+.finp,.fsel{width:100%;padding:11px 13px;border:1px solid var(--br2);border-radius:var(--r);font-size:14px;background:var(--bg);direction:rtl}
+.btn-full{width:100%;padding:12px;background:var(--primary);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-full i{font-size:18px}
+.aitem{display:flex;gap:10px;padding:12px 14px;border-bottom:.5px solid var(--br);align-items:flex-start}
+.aitem:last-child{border-bottom:none}
+.aitem i{font-size:20px;flex-shrink:0}
+.atxt{font-size:13px;font-weight:500}
+.asub{font-size:11px;color:var(--tx2);margin-top:2px}
+.ardbtn{margin-top:6px;padding:4px 10px;border-radius:6px;border:1px solid var(--br2);font-size:11px;background:transparent;cursor:pointer}
+.view{display:none}.view.on{display:block}
+.ibanner{background:var(--primary-lt);border:1px solid var(--primary);border-radius:var(--r);padding:12px 14px;margin-bottom:10px;display:none}
+.ibanner.show{display:flex;gap:10px;align-items:center}
+.ibanner i{font-size:24px;color:var(--primary);flex-shrink:0}
+.itxt{flex:1}
+.ititle{font-size:14px;font-weight:600;color:var(--primary)}
+.isub{font-size:12px;color:var(--tx2);margin-top:2px}
+.ibtn{padding:8px 14px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+.tabs{display:flex;border-bottom:.5px solid var(--br);overflow-x:auto}
+.tab{flex-shrink:0;padding:10px 14px;font-size:13px;cursor:pointer;color:var(--tx2);border-bottom:2px solid transparent;margin-bottom:-.5px;white-space:nowrap}
+.tab.on{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
+.comp-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:.5px solid var(--br);font-size:12px}
+.comp-row:last-child{border-bottom:none}
+.clbl{width:60px;color:var(--tx2);flex-shrink:0}
+.cbar{flex:1;height:8px;background:var(--bg2);border-radius:4px;overflow:hidden;position:relative}
+.cme{height:100%;border-radius:4px}
+.cavg{position:absolute;top:0;height:100%;width:2px;background:#E24B4A}
+.cval{width:28px;text-align:left;font-weight:600}
+.cavgv{font-size:11px;color:var(--tx3)}
+.toast-w{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+.toast-w.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="hlogo" id="hlogo">מ</div>
+      <div><div class="htitle" id="htitle">מוקד שיבוץ</div><div class="hsub">יולי 2026</div></div>
+    </div>
+    <button class="hbtn" onclick="showToast('בונה סידור... ✅')"><i class="ti ti-wand"></i> בנה</button>
+  </div>
+  <div class="offline" id="offBanner"><i class="ti ti-wifi-off"></i> אופליין — מציג נתונים שמורים</div>
+  <div class="content">
+    <div id="v-dash" class="view on">
+      <div class="ibanner" id="installBanner">
+        <i class="ti ti-download"></i>
+        <div class="itxt"><div class="ititle">התקן את האפליקציה</div><div class="isub">הוסף למסך הבית לגישה מהירה</div></div>
+        <button class="ibtn" onclick="installApp()">התקן</button>
+      </div>
+      <div class="metrics" id="dash-metrics"></div>
+      <div class="card"><div class="card-hdr">סידור השבוע</div><div class="sscroll"><table id="main-sched"></table></div></div>
+    </div>
+    <div id="v-sched" class="view">
+      <div class="card"><div class="card-hdr">סידור יולי 2026</div><div class="sscroll"><table id="full-sched"></table></div></div>
+    </div>
+    <div id="v-workers" class="view">
+      <input type="text" class="finp" placeholder="חיפוש עובד..." id="wsearch" oninput="renderWorkers()" style="margin-bottom:10px">
+      <div class="wgrid" id="wgrid"></div>
+    </div>
+    <div id="v-portal" class="view">
+      <select class="ppick" id="ppick" onchange="renderPortal(this.value)"></select>
+      <div class="metrics" id="pmetrics"></div>
+      <div class="card">
+        <div class="tabs">
+          <div class="tab on" id="pt0" onclick="pTab(0)">הסידור שלי</div>
+          <div class="tab" id="pt1" onclick="pTab(1)">השוואה</div>
+          <div class="tab" id="pt2" onclick="pTab(2)">הגש אילוץ</div>
+        </div>
+        <div id="pv0"></div>
+        <div id="pv1" style="display:none;padding:12px 14px"><div id="pcomp"></div></div>
+        <div id="pv2" style="display:none;padding:12px 14px">
+          <div class="fgroup"><span class="flbl">תאריך</span><input type="date" class="finp" id="pdt" value="2026-08-10"></div>
+          <div class="fgroup"><span class="flbl">סיבה</span><select class="fsel" id="prs"><option>חופש</option><option>מחלה</option><option>היעדרות</option><option>הדרכה</option></select></div>
+          <button class="btn-full" onclick="submitCon()"><i class="ti ti-send"></i>שלח אילוץ</button>
+          <div id="pcons" style="margin-top:12px"></div>
+        </div>
+      </div>
+    </div>
+    <div id="v-alerts" class="view"><div class="card" id="alerts-card"></div></div>
+  </div>
+  <nav class="bnav">
+    <div class="bni on" id="bn-dash" onclick="goTo('dash',this)"><i class="ti ti-layout-dashboard"></i><span>דשבורד</span></div>
+    <div class="bni" id="bn-sched" onclick="goTo('sched',this)"><i class="ti ti-calendar"></i><span>סידור</span></div>
+    <div class="bni" id="bn-workers" onclick="goTo('workers',this)"><i class="ti ti-users"></i><span>עובדים</span></div>
+    <div class="bni" id="bn-portal" onclick="goTo('portal',this)"><i class="ti ti-id-badge"></i><span>פורטל</span></div>
+    <div class="bni" id="bn-alerts" onclick="goTo('alerts',this)"><i class="ti ti-bell"></i><span>התראות</span><span class="bnbadge" id="abadge">4</span></div>
+  </nav>
+</div>
+<div class="toast-w" id="toastEl"></div>
+<script>
+const YBG={ורוד:'#FFB3CC',צהוב:'#FFFF99',כחול:'#B5D4F4'};
+const YFG={ורוד:'#4B1528',צהוב:'#633806',כחול:'#042C53'};
+const SC={בוקר:{bg:'#FFFFF9C4',fg:'#412402'},צהריים:{bg:'#E3F2FD',fg:'#042C53'},לילה:{bg:'#E8EAF6',fg:'#26215C'},'שישי בוקר':{bg:'#FCE4EC',fg:'#4B1528'},'שבת לילה':{bg:'#FCE4EC',fg:'#4B1528'},פגרה:{bg:'#F1EFE8',fg:'#444441'}};
+const TS={'בש"ל':{bg:'#EAF3DE',fg:'#173404'},'שח"מ':{bg:'#FCEBEB',fg:'#501313'},'סטודנט':{bg:'#FAEEDA',fg:'#412402'},'קבע':{bg:'#E6F1FB',fg:'#042C53'},'שמ"ז':{bg:'#E8EAF6',fg:'#26215C'}};
+
+const SHIFTS=[
+  {date:'02/07',day:'ראשון',shifts:[
+    {t:'בוקר',a:{n:'טל',y:'צהוב'},w:[{n:'הלל',y:'צהוב'},{n:'לב אנה',y:'צהוב'},{n:'תפארת',y:'צהוב'},{n:'אגם',y:'צהוב'},{n:'דבוש',y:'צהוב'},{n:'נועה צ',y:'צהוב'},{n:'אביטל נ',y:null}],full:true},
+    {t:'צהריים',a:{n:'יצחקי',y:'כחול'},w:[{n:'ליאל',y:'כחול'},{n:'לינוי',y:'כחול'},{n:'רעות',y:'כחול'},{n:'נועה ק',y:'כחול'},{n:'סוטו',y:'כחול'},{n:'עדי לוי',y:null}],full:true},
+    {t:'לילה',a:{n:'הרוש',y:'ורוד'},w:[{n:'הילה ב',y:'ורוד'},{n:'ליה',y:'ורוד'},{n:'תמר',y:'ורוד'},{n:'נהוראי',y:'ורוד'},{n:'זוהר',y:'ורוד'}],full:true},
+  ]},
+  {date:'03/07',day:'שני',shifts:[
+    {t:'בוקר',a:{n:'לינוי',y:'כחול'},w:[{n:'ליאל',y:'כחול'},{n:'רעות',y:'כחול'},{n:'לי אור',y:'ורוד'},{n:'אביה',y:'ורוד'}],full:false},
+    {t:'צהריים',a:{n:'לב אנה',y:'צהוב'},w:[{n:'הלל',y:'צהוב'},{n:'תפארת',y:'צהוב'},{n:'נועה צ',y:'צהוב'},{n:'רועי',y:'כחול'},{n:'ליאן נ',y:null}],full:true},
+    {t:'לילה',a:{n:'יצחקי',y:'כחול'},w:[{n:'נועה ק',y:'כחול'},{n:'שוהם',y:'כחול'},{n:'הילה ב',y:'ורוד'},{n:'תמר',y:'ורוד'},{n:'זוהר',y:'ורוד'}],full:true},
+  ]},
+  {date:'04/07',day:'שלישי',shifts:[
+    {t:'בוקר',a:{n:'הרוש',y:'ורוד'},w:[{n:'הילה ב',y:'ורוד'},{n:'ליה',y:'ורוד'},{n:'לי אור',y:'ורוד'}],full:false},
+    {t:'צהריים',a:{n:'טל',y:'צהוב'},w:[{n:'הלל',y:'צהוב'},{n:'לב אנה',y:'צהוב'},{n:'תפארת',y:'צהוב'},{n:'דבוש',y:'צהוב'},{n:'ליאן ג',y:null}],full:true},
+    {t:'לילה',a:{n:'לינוי',y:'כחול'},w:[{n:'ליאל',y:'כחול'},{n:'נועה ק',y:'כחול'},{n:'נהוראי',y:'ורוד'},{n:'זוהר',y:'ורוד'},{n:'אביטל נ',y:null}],full:true},
+  ]},
+];
+
+const WORKERS=[
+  {n:'הרוש',fn:'מעיין הרוש',r:'אחמ"ש',t:'בש"ל',y:'ורוד',c:false,s:16,nl:8,h:127,avg_s:17.5,avg_n:7.5,
+   shifts:[{d:'02/07',day:'ראשון',t:'לילה',hrs:'21:25–06:55',w1:{c:'wr',i:'ti-shield-check',txt:'יח"מ ורוד תורן ללילה.'},w2:{c:'ww',i:'ti-alert-triangle',txt:'לילה — למחרת: צהריים/לילה בלבד, לא בוקר.'}},{d:'03/07',day:'שני',t:'צהריים',hrs:'15:25–21:25',w1:{c:'wr',i:'ti-shield-check',txt:'יח"מ ורוד תורן לצהריים.'},w2:{c:'wa',i:'ti-sparkles',txt:'יום אחרי לילה — צהריים תקין.'}},{d:'04/07',day:'שלישי',t:'בוקר',hrs:'06:55–15:25',w1:{c:'wr',i:'ti-shield-check',txt:'יח"מ ורוד תורן לבוקר.'},w2:null}],cons:[]},
+  {n:'טל',fn:'טל סעדון',r:'אחמ"ש',t:'בש"ל',y:'צהוב',c:true,s:18,nl:7,h:136,avg_s:17.5,avg_n:7.5,
+   shifts:[{d:'02/07',day:'ראשון',t:'בוקר',hrs:'06:55–15:25',w1:{c:'wr',i:'ti-shield-check',txt:'יח"מ צהוב תורן לבוקר.'},w2:{c:'wa',i:'ti-sparkles',txt:'שובצת כאחמ"ש — בגיוון.'}},{d:'03/07',day:'שני',t:'צהריים',hrs:'15:25–21:25',w1:{c:'wr',i:'ti-shield-check',txt:'יח"מ צהוב תורן לצהריים.'},w2:null},{d:'04/07',day:'שלישי',t:'צהריים',hrs:'15:25–21:25',w1:{c:'wr',i:'ti-shield-check',txt:'יח"מ צהוב תורן לצהריים.'},w2:null}],cons:[]},
+  {n:'זוהר',fn:'זוהר צרפתי',r:'אחמ"ש',t:'שח"מ',y:'ורוד',c:true,s:17,nl:7,h:142,avg_s:17.5,avg_n:7.5,
+   shifts:[{d:'02/07',day:'ראשון',t:'לילה',hrs:'21:25–06:55',w1:{c:'wr',i:'ti-shield-check',txt:'יח"מ ורוד תורן ללילה.'},w2:null},{d:'03/07',day:'שני',t:'לילה',hrs:'21:25–06:55',w1:{c:'wr',i:'ti-shield-check',txt:'יח"מ ורוד תורן ללילה.'},w2:{c:'ww',i:'ti-alert-triangle',txt:'לילה שני ברצף — מקסימום 2.'}},{d:'04/07',day:'שלישי',t:'לילה',hrs:'21:25–06:55',w1:{c:'wr',i:'ti-shield-check',txt:'יח"מ ורוד תורן ללילה.'},w2:null}],cons:[]},
+  {n:'אביטל נ',fn:'אביטל נדב',r:'מוקדן',t:'סטודנט',y:null,c:true,s:7,nl:2,h:67,avg_s:7.2,avg_n:3.1,
+   shifts:[{d:'02/07',day:'ראשון',t:'בוקר',hrs:'06:55–15:25',w1:{c:'wr',i:'ti-shield-check',txt:'שובצת להשלמת יח"מ צהוב.'},w2:{c:'wa',i:'ti-sparkles',txt:'סופ"ש 1/4 — חייבת 4 בחודש.'}}],cons:[]},
+];
+['יצחקי','לב אנה','לינוי','הלל','תפארת','ליאל','רעות','אביה','הילה ב','נועה ק','נהוראי','אגם','ליאן נ','סמנתה','משרקי'].forEach(n=>{
+  if(WORKERS.find(w=>w.n===n))return;
+  const yM={יצחקי:'כחול','לב אנה':'צהוב',לינוי:'כחול',הלל:'צהוב',תפארת:'צהוב',ליאל:'כחול',רעות:'כחול',אביה:'ורוד','הילה ב':'ורוד','נועה ק':'כחול',נהוראי:'ורוד',אגם:'צהוב'};
+  const tM={'נועה ק':'שח"מ',נהוראי:'שח"מ',אגם:'שח"מ','ליאן נ':'סטודנט',סמנתה:'שמ"ז',משרקי:'קבע'};
+  const sM={יצחקי:17,'לב אנה':18,לינוי:17,הלל:18,תפארת:18,ליאל:17,רעות:17,אביה:16,'הילה ב':16,'נועה ק':18,נהוראי:17,אגם:19,'ליאן נ':7,סמנתה:6,משרקי:7};
+  const s=sM[n]||17;
+  WORKERS.push({n,fn:n,r:['לב אנה','לינוי','נועה ק','ליאן נ','סמנתה','משרקי'].includes(n)?'אחמ"ש':'מוקדן',
+    t:tM[n]||'בש"ל',y:yM[n]||null,c:false,s,nl:7,h:Math.round(s*7.5),avg_s:17.5,avg_n:7.5,
+    shifts:[{d:'02/07',day:'ראשון',t:'בוקר',hrs:'06:55–15:25',w1:{c:'wr',i:'ti-shield-check',txt:'שובצת/ת לפי סיבוב יח"מ.'},w2:null}],cons:[]});
+});
+
+const ALERTS=[
+  {id:1,type:'swap',msg:'הרוש ביקשה החלפה — בוקר 10/07',sub:'מחליפים מוצעים: טל, לב אנה',read:false},
+  {id:2,type:'shortage',msg:'שישי לילה 01/07 — חסר עובד',sub:'5 מתוך 6 עובדים',read:false},
+  {id:3,type:'constraint',msg:'יצחקי הגישה חופש ל-20/07',sub:'ממתין לאישור',read:false},
+  {id:4,type:'shortage',msg:'שבת לילה 05/07 — חסר עובד',sub:'5 מתוך 6',read:false},
+];
+let pCons={};
+WORKERS.forEach(w=>pCons[w.n]=[]);
+
+function goTo(n,el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.querySelectorAll('.bni').forEach(b=>b.classList.remove('on'));
+  document.getElementById('v-'+n).classList.add('on');
+  el.classList.add('on');
+  if(n==='workers')renderWorkers();
+  if(n==='portal')initPortal();
+  if(n==='alerts')renderAlerts();
+  if(n==='sched')buildSched('full-sched',true);
+}
+
+function buildSched(id,all){
+  const t=document.getElementById(id);if(!t)return;
+  const days=all?SHIFTS:SHIFTS.slice(0,3);
+  const types=['בוקר','צהריים','לילה'];
+  const dotC={בוקר:'#639922',צהריים:'#185FA5',לילה:'#534AB7'};
+  let h='<thead><tr><th style="text-align:right;padding-right:8px">משמרת</th>';
+  days.forEach(d=>h+=`<th>${d.day}<br><span style="font-weight:400;font-size:10px">${d.date}</span></th>`);
+  h+='</tr></thead><tbody>';
+  types.forEach(st=>{
+    h+=`<tr><td style="padding:5px 7px;background:#f5f5f5;font-weight:600;white-space:nowrap"><span style="width:5px;height:5px;border-radius:50%;background:${dotC[st]};display:inline-block;margin-left:5px"></span>${st}</td>`;
+    days.forEach(d=>{
+      const s=d.shifts.find(x=>x.t===st);
+      if(!s){h+='<td></td>';return;}
+      const bg=s.full?'#F1F8E9':'#FFFDE7';
+      h+=`<td style="background:${bg};vertical-align:top;padding:3px 4px">`;
+      if(s.a)h+=`<span class="tag ta">★${s.a.n}</span>`;
+      s.w.slice(0,3).forEach(w=>{const yc=w.y?{'צהוב':'ty','כחול':'tb','ורוד':'tp'}[w.y]:'te';h+=`<span class="tag ${yc}">${w.n}</span>`;});
+      if(s.w.length>3)h+=`<span style="font-size:9px;color:#999">+${s.w.length-3}</span>`;
+      h+=`<div style="font-size:10px;color:#999;margin-top:2px">${s.full?'✅':'🟡'}${(s.a?1:0)+s.w.length}</div></td>`;
+    });
+    h+='</tr>';
+  });
+  t.innerHTML=h+'</tbody>';
+}
+
+function renderDashMetrics(){
+  document.getElementById('dash-metrics').innerHTML=`
+    <div class="metric"><div class="ml">עובדים</div><div class="mv" style="color:#185FA5">19</div><div class="ms">22 אחמ"שים</div></div>
+    <div class="metric"><div class="ml">קריטי</div><div class="mv" style="color:#3B6D11">0</div><div class="ms">השבוע</div></div>
+    <div class="metric"><div class="ml">החלפות</div><div class="mv" style="color:#BA7517">2</div><div class="ms">ממתינות</div></div>
+    <div class="metric"><div class="ml">אילוצים</div><div class="mv">2</div><div class="ms">פתוחים</div></div>`;
+}
+
+function renderWorkers(){
+  const q=document.getElementById('wsearch')?.value||'';
+  const sel=WORKERS.filter(w=>!q||w.n.includes(q)||w.fn.includes(q));
+  document.getElementById('wgrid').innerHTML=sel.map(w=>{
+    const tc=TS[w.t]||{bg:'#E6F1FB',fg:'#042C53'};
+    const yb=YBG[w.y]||'#EAF3DE',yf=YFG[w.y]||'#173404';
+    return `<div class="wcard"><div class="wct"><div class="wav" style="background:${yb};color:${yf}">${w.n.slice(0,2)}</div><div><div class="wname">${w.n}</div><div class="wrole">${w.r}${w.c?' 🔑':''}</div></div></div><span class="wtype" style="background:${tc.bg};color:${tc.fg}">${w.t}</span><div class="ws">${[['משמרות',w.s],['לילות',w.nl],['שעות',Math.round(w.h)]].map(([l,v])=>`<div class="wst"><div class="wsv">${v}</div><div class="wsl">${l}</div></div>`).join('')}</div></div>`;
+  }).join('');
+}
+
+function initPortal(){
+  const pick=document.getElementById('ppick');
+  if(!pick.options.length)WORKERS.forEach(w=>{const o=document.createElement('option');o.value=w.n;o.textContent=`${w.n} — ${w.r}${w.y?', יח"מ '+w.y:''}`;pick.appendChild(o);});
+  renderPortal(pick.value||WORKERS[0].n);
+}
+
+function renderPortal(name){
+  const w=WORKERS.find(x=>x.n===name)||WORKERS[0];
+  document.getElementById('ppick').value=w.n;
+  const sp=Math.min(Math.round((w.s/Math.max(w.s,w.avg_s))*100),100);
+  document.getElementById('pmetrics').innerHTML=`
+    <div class="metric"><div class="ml">משמרות</div><div class="mv" style="color:#185FA5">${w.s}</div><div class="ms">ממוצע: ${w.avg_s}</div></div>
+    <div class="metric"><div class="ml">לילות</div><div class="mv" style="color:#534AB7">${w.nl}</div><div class="ms">ממוצע: ${w.avg_n}</div></div>
+    <div class="metric"><div class="ml">שעות</div><div class="mv">${Math.round(w.h)}</div><div class="ms">ממוצע: ${Math.round(w.avg_s*7.5)}</div></div>
+    <div class="metric"><div class="ml">פגרות</div><div class="mv" style="color:#3B6D11">${w.t==='שח"מ'?2:0}</div><div class="ms">שנצברו</div></div>`;
+  let sh='';
+  w.shifts.forEach(s=>{
+    const sc2=SC[s.t]||{bg:'#f5f5f5',fg:'#333'};
+    sh+=`<div class="srow"><div class="sd8"><div class="sday">${s.day.slice(0,3)}</div><div class="snum">${s.d.split('/')[0]}</div></div><div class="si"><div style="display:flex;align-items:center;gap:7px;margin-bottom:3px"><span class="spill" style="background:${sc2.bg};color:${sc2.fg}">${s.t}</span>${s.hrs!=='—'?`<span class="shrs">${s.hrs}</span>`:''}</div>${s.w1?`<div class="why ${s.w1.c}"><i class="ti ${s.w1.i}"></i>${s.w1.txt}</div>`:''} ${s.w2?`<div class="why ${s.w2.c}" style="margin-top:3px"><i class="ti ${s.w2.i}"></i>${s.w2.txt}</div>`:''}</div></div>`;
+  });
+  document.getElementById('pv0').innerHTML=sh;
+  const rows=[{l:'משמרות',me:w.s,avg:w.avg_s,max:Math.max(w.s,w.avg_s)*1.15,c:'#185FA5'},{l:'לילות',me:w.nl,avg:w.avg_n,max:Math.max(w.nl,w.avg_n)*1.15,c:'#534AB7'},{l:'שעות',me:Math.round(w.h),avg:Math.round(w.avg_s*7.5),max:Math.max(w.h,w.avg_s*7.5)*1.15,c:'#639922'}];
+  const diff=w.s-w.avg_s;
+  const st=Math.abs(diff)<1.5?'<span style="color:#3B6D11">במרכז הטווח</span>':diff>0?`<span style="color:#BA7517">${diff.toFixed(1)}+ מעל</span>`:`<span style="color:#185FA5">${Math.abs(diff).toFixed(1)}- מתחת</span>`;
+  let cp=`<div style="font-size:12px;padding:8px 10px;background:#f5f5f5;border-radius:8px;margin-bottom:10px">את/ה ${st} לממוצע.</div>`;
+  rows.forEach(r=>{const mp=Math.min((r.me/r.max)*100,100),ap=Math.min((r.avg/r.max)*100,100);cp+=`<div class="comp-row"><div class="clbl">${r.l}</div><div class="cbar"><div class="cme" style="width:${mp.toFixed(1)}%;background:${r.c}"></div><div class="cavg" style="right:${(100-ap).toFixed(1)}%"></div></div><div class="cval">${r.me}</div><div class="cavgv">ממוצע: ${Number.isInteger(r.avg)?r.avg:r.avg.toFixed(1)}</div></div>`;});
+  document.getElementById('pcomp').innerHTML=cp;
+  const all=[...(w.cons||[]),...(pCons[w.n]||[])];
+  document.getElementById('pcons').innerHTML=all.length?'<div style="font-size:12px;font-weight:600;color:#666;margin-bottom:6px">אילוצים שהגשת:</div>'+all.map(c=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:#f5f5f5;border-radius:8px;margin-bottom:4px;font-size:12px"><i class="ti ti-clock" style="color:#BA7517;font-size:16px"></i><span style="font-weight:600">${c.d||c.date}</span><span>${c.r||c.reason}</span><span style="margin-right:auto;font-size:11px;padding:2px 7px;border-radius:8px;background:#FAEEDA;color:#412402">ממתין</span></div>`).join(''):'<div style="font-size:12px;color:#999;margin-top:8px">אין אילוצים פתוחים</div>';
+}
+
+function pTab(i){[0,1,2].forEach(j=>{document.getElementById('pv'+j).style.display=j===i?'block':'none';document.getElementById('pt'+j).classList.toggle('on',j===i);});}
+
+function submitCon(){
+  const name=document.getElementById('ppick').value;
+  const dt=document.getElementById('pdt').value;
+  const r=document.getElementById('prs').value;
+  const d=dt.split('-').reverse().slice(0,2).join('/');
+  if(!pCons[name])pCons[name]=[];
+  pCons[name].push({d,r});
+  const w=WORKERS.find(x=>x.n===name);
+  if(w)renderPortal(w.n);
+  showToast('האילוץ נשמר — הקמב"צ יקבל התראה');
+}
+
+function renderAlerts(){
+  const icons={constraint:'ti-clock',swap:'ti-arrows-exchange',shortage:'ti-alert-triangle'};
+  const colors={constraint:'#185FA5',swap:'#BA7517',shortage:'#A32D2D'};
+  document.getElementById('alerts-card').innerHTML=ALERTS.map(a=>`<div class="aitem" style="opacity:${a.read?.6:1}"><i class="ti ${icons[a.type]}" style="color:${colors[a.type]}"></i><div style="flex:1"><div class="atxt">${a.msg}</div><div class="asub">${a.sub}</div>${!a.read?`<button class="ardbtn" onclick="readAlert(${a.id})">סמן כנקרא</button>`:''}</div></div>`).join('');
+  document.getElementById('abadge').textContent=ALERTS.filter(a=>!a.read).length;
+}
+
+function readAlert(id){const a=ALERTS.find(x=>x.id===id);if(a)a.read=true;renderAlerts();}
+
+function showToast(msg){const t=document.getElementById('toastEl');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);}
+
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBanner').classList.add('show');});
+function installApp(){
+  if(!deferredPrompt){showToast('פתח תפריט → "הוסף למסך הבית"');return;}
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(r=>{if(r.outcome==='accepted')showToast('האפליקציה הותקנה! 🎉');deferredPrompt=null;document.getElementById('installBanner').classList.remove('show');});
+}
+window.addEventListener('offline',()=>document.getElementById('offBanner').classList.add('show'));
+window.addEventListener('online',()=>document.getElementById('offBanner').classList.remove('show'));
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/sw.js').catch(e=>console.warn('SW:',e));
+}
+
+renderDashMetrics();
+buildSched('main-sched',false);
+</script>
+</body>
+</html>
